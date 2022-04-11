@@ -215,6 +215,7 @@ Arvore* ConsultaArvore(char palavra[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz) {
 // Imprime uma string de letras no arquivo de saída após consultar se é palavra do dicionário e
 // realizar as devidas alterações.
 void DespachaBufferDeLetras(char buffer[TAMANHO_MAXIMO_PALAVRA], FILE *saida, Arvore *dicionario) {
+    LowerCase(buffer);
     Arvore *endereco = ConsultaArvore(buffer, dicionario);
     if(endereco != NULL) {
         strncpy(buffer, endereco->sinonimo->palavra, TAMANHO_MAXIMO_PALAVRA);
