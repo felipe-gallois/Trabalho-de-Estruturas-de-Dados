@@ -14,38 +14,28 @@ Arvore* InicializaArvore() {
     return NULL;
 }
 
-// Insere um nodo na ABP com o ponteiro de sinônimo em NULL e registra o endereço do nodo adicionado em um ponteiro.
+// Insere um nodo na ABP com a palavra e seu sinônimo.
 // Retorna o endereço para a nova raiz.
-Arvore* InsereNodo(char palavra[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz, Arvore **pt_nodo) {
+Arvore* InsereNodo(char palavra[TAMANHO_MAXIMO_PALAVRA], char sinonimo[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz) {
     if(raiz == NULL) {
         Arvore *novo_nodo = (Arvore*) malloc(sizeof(Arvore));
         char chave[TAMANHO_MAXIMO_PALAVRA];
         strncpy(chave, palavra, TAMANHO_MAXIMO_PALAVRA);
         LowerCase(chave);
         strncpy(novo_nodo->palavra, chave, TAMANHO_MAXIMO_PALAVRA);
+        strncpy(chave, sinonimo, TAMANHO_MAXIMO_PALAVRA);
+        LowerCase(chave);
+        strncpy(novo_nodo->sinonimo, chave, TAMANHO_MAXIMO_PALAVRA);
         novo_nodo->esq = NULL;
         novo_nodo->dir = NULL;
-        novo_nodo->sinonimo = NULL;
-        *pt_nodo = novo_nodo;
         raiz = novo_nodo;
     } else {
         if(strncmp(palavra, raiz->palavra, TAMANHO_MAXIMO_PALAVRA) < 0) {
-            raiz->esq = InsereNodo(palavra, raiz->esq, pt_nodo);
+            raiz->esq = InsereNodo(palavra, sinonimo, raiz->esq);
         } else {
-            raiz->dir = InsereNodo(palavra, raiz->dir, pt_nodo);
+            raiz->dir = InsereNodo(palavra, sinonimo, raiz->dir);
         }
     }
-    return raiz;
-}
-
-// Insere duas palavras sinônimas na Arvore e faz seus ponteiros de sinônimo apontarem um ao outro.
-// Retorna o endereço para a nova raiz da árvore.
-Arvore* InsereParDeNodos(char palavra1[TAMANHO_MAXIMO_PALAVRA], char palavra2[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz) {
-    Arvore *nodo1, *nodo2;
-    raiz = InsereNodo(palavra1, raiz, &nodo1);
-    raiz = InsereNodo(palavra2, raiz, &nodo2);
-    nodo1->sinonimo = nodo2;
-    nodo2->sinonimo = nodo1;
     return raiz;
 }
 
@@ -75,13 +65,13 @@ int CalculaAlturaArvore(Arvore *raiz) {
 Arvore* ConsultaArvore(char palavra[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz) {
     while(raiz != NULL) {
         numero_de_comparacoes++;
-        if(strcmp(raiz->palavra, palavra) == 0) {
+        if(strncmp(raiz->palavra, palavra, TAMANHO_MAXIMO_PALAVRA) == 0) {
             numero_de_comparacoes++;
             return raiz;
         }
         else {
             numero_de_comparacoes++;
-            if(strcmp(raiz->palavra, palavra) > 0)
+            if(strncmp(raiz->palavra, palavra, TAMANHO_MAXIMO_PALAVRA) > 0)
                 raiz = raiz->esq;
             else
                 raiz = raiz->dir;
@@ -96,7 +86,7 @@ void DespachaBufferDeLetras(char buffer[TAMANHO_MAXIMO_PALAVRA], FILE *saida, Ar
     LowerCase(buffer);
     Arvore *endereco = ConsultaArvore(buffer, dicionario);
     if(endereco != NULL) {
-        strncpy(buffer, endereco->sinonimo->palavra, TAMANHO_MAXIMO_PALAVRA);
+        strncpy(buffer, endereco->sinonimo, TAMANHO_MAXIMO_PALAVRA);
     }
     fprintf(saida, "%s", buffer);
 }

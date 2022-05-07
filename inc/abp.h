@@ -9,16 +9,14 @@
 
 typedef struct abp_t {
     char palavra[TAMANHO_MAXIMO_PALAVRA];
+    char sinonimo[TAMANHO_MAXIMO_PALAVRA];
     struct abp_t *esq;
     struct abp_t *dir;
-    struct abp_t *sinonimo;
 } Arvore;
 
 Arvore* InicializaArvore();
 
-Arvore* InsereNodo(char palavra[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz, Arvore **pt_nodo);
-
-Arvore* InsereParDeNodos(char palavra1[TAMANHO_MAXIMO_PALAVRA], char palavra2[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz);
+Arvore* InsereNodo(char palavra[TAMANHO_MAXIMO_PALAVRA], char sinonimo[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz);
 
 int ContaNodosArvore(Arvore *raiz);
 

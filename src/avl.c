@@ -87,13 +87,12 @@ Arvore* RotacaoDireita(Arvore *raiz , int *ok) {
     aux = raiz->esq;
     if(aux->fator == 1) {
         raiz = RotacaoSimplesDireita(raiz);
-        numero_de_rotacoes++;
     } else {
         raiz = RotacaoDuplaDireita(raiz);
-        numero_de_rotacoes += 2;
     }
     raiz->fator = 0;
     *ok = 0;
+    numero_de_rotacoes++;
     return raiz;
 }
 
@@ -103,29 +102,30 @@ Arvore* RotacaoEsquerda(Arvore *raiz , int *ok) {
     aux = raiz->dir;
     if(aux->fator == -1) {
         raiz = RotacaoSimplesEsquerda(raiz);
-        numero_de_rotacoes++;
     } else {
         raiz = RotacaoDuplaEsquerda(raiz);
-        numero_de_rotacoes += 2;
     }
     raiz->fator = 0;
     *ok = 0;
+    numero_de_rotacoes++;
     return raiz;
 }
 
-// Insere um nodo na AVL com o ponteiro de sinônimo em NULL e registra o endereço do nodo adicionado em um ponteiro.
+// Insere um nodo na AVL com a palavra e seu sinônimo.
 // Retorna o endereço para a nova raiz.
-Arvore* InsereNodo(char palavra[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz, Arvore **pt_nodo, int *ok) {
+Arvore* InsereNodo(char palavra[TAMANHO_MAXIMO_PALAVRA], char sinonimo[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz, int *ok) {
     if(raiz == NULL) {
         raiz = (Arvore*) malloc(sizeof(Arvore));
         strncpy(raiz->palavra, palavra, TAMANHO_MAXIMO_PALAVRA);
+        LowerCase(raiz->palavra);
+        strncpy(raiz->sinonimo, sinonimo, TAMANHO_MAXIMO_PALAVRA);
+        LowerCase(raiz->sinonimo);
         raiz->esq = NULL;
         raiz->dir = NULL;
         raiz->fator = 0;
-        *pt_nodo = raiz;
         *ok = 1;
     } else if(strncmp(palavra, raiz->palavra, TAMANHO_MAXIMO_PALAVRA) < 0) {
-        raiz->esq = InsereNodo(palavra, raiz->esq, pt_nodo, ok);
+        raiz->esq = InsereNodo(palavra, sinonimo, raiz->esq, ok);
         if(*ok) {
             switch(raiz->fator) {
                 case -1:
@@ -141,7 +141,7 @@ Arvore* InsereNodo(char palavra[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz, Arvore **
             }
         }
     } else {
-        raiz->dir = InsereNodo(palavra, raiz->dir, pt_nodo, ok);
+        raiz->dir = InsereNodo(palavra, sinonimo, raiz->dir, ok);
         if(*ok) {
             switch (raiz->fator) {
                 case 1:
@@ -157,17 +157,6 @@ Arvore* InsereNodo(char palavra[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz, Arvore **
             }
         }
     }
-    return raiz;
-}
-
-// Insere duas palavras sinônimas na Arvore e faz seus ponteiros de sinônimo apontarem um ao outro.
-// Retorna o endereço para a nova raiz da árvore.
-Arvore* InsereParDeNodos(char palavra1[TAMANHO_MAXIMO_PALAVRA], char palavra2[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz, int *ok) {
-    Arvore *nodo1, *nodo2;
-    raiz = InsereNodo(palavra1, raiz, &nodo1, ok);
-    raiz = InsereNodo(palavra2, raiz, &nodo2, ok);
-    nodo1->sinonimo = nodo2;
-    nodo2->sinonimo = nodo1;
     return raiz;
 }
 
@@ -218,7 +207,7 @@ void DespachaBufferDeLetras(char buffer[TAMANHO_MAXIMO_PALAVRA], FILE *saida, Ar
     LowerCase(buffer);
     Arvore *endereco = ConsultaArvore(buffer, dicionario);
     if(endereco != NULL) {
-        strncpy(buffer, endereco->sinonimo->palavra, TAMANHO_MAXIMO_PALAVRA);
+        strncpy(buffer, endereco->sinonimo, TAMANHO_MAXIMO_PALAVRA);
     }
     fprintf(saida, "%s", buffer);
 }

@@ -95,7 +95,7 @@ Arvore* CarregaDicionario(FILE* dicionario, Arvore* raiz) {
     while(!sinal) {
         sinal = LeLinhaDicionario(dicionario, linha, palavra, sinonimo);
         if(!sinal)
-            raiz = InsereParDeNodos(palavra, sinonimo, raiz);
+            raiz = InsereNodo(palavra, sinonimo, raiz);
     }
     return raiz;
 }
@@ -109,7 +109,7 @@ Arvore* CarregaDicionario(FILE* dicionario, Arvore* raiz, int *ok) {
     while(!sinal) {
         sinal = LeLinhaDicionario(dicionario, linha, palavra, sinonimo);
         if(!sinal)
-            raiz = InsereParDeNodos(palavra, sinonimo, raiz, ok);
+            raiz = InsereNodo(palavra, sinonimo, raiz, ok);
     }
     return raiz;
 }

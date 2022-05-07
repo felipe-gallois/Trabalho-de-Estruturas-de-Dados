@@ -9,7 +9,7 @@
 // Retorna 1 se o caractere de entrada for caractere que compõe uma palavra.
 // Senão, retorna 0.
 int Letra(char caractere) {
-    caractere = (char) tolower((int) caractere);
+    caractere = tolower(caractere);
     unsigned char c = (unsigned char) caractere;
     if(c == 0x2d ||
         (c >= 0x61 && c <= 0x7a) ||

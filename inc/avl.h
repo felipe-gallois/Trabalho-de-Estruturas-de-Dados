@@ -9,10 +9,10 @@
 
 typedef struct avl_t {
     char palavra[TAMANHO_MAXIMO_PALAVRA];
+    char sinonimo[TAMANHO_MAXIMO_PALAVRA];
     int fator;
     struct avl_t *esq;
     struct avl_t *dir;
-    struct avl_t *sinonimo;
 } Arvore;
 
 Arvore* InicializaArvore();
@@ -29,9 +29,7 @@ Arvore* RotacaoDireita(Arvore *raiz , int *ok);
 
 Arvore* RotacaoEsquerda(Arvore *raiz , int *ok);
 
-Arvore* InsereNodo(char palavra[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz, Arvore **pt_nodo, int *ok);
-
-Arvore* InsereParDeNodos(char palavra1[TAMANHO_MAXIMO_PALAVRA], char palavra2[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz, int *ok);
+Arvore* InsereNodo(char palavra[TAMANHO_MAXIMO_PALAVRA], char sinonimo[TAMANHO_MAXIMO_PALAVRA], Arvore *raiz, int *ok);
 
 int ContaNodosArvore(Arvore *raiz);
 
